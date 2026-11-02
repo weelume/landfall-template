@@ -1,0 +1,117 @@
+{
+  "format": "git-template-customization",
+  "formatVersion": "0.2.0",
+  "entries": [
+    {
+      "id": "brand",
+      "title": "品牌与联系方式",
+      "description": "保持模板职责边界、双语与响应式；运行相关检查。",
+      "files": [
+        {
+          "path": "src/features/site-templates/catalog/landfall/config/brand.ts",
+          "kind": "file",
+          "purpose": "品牌与联系方式"
+        }
+      ],
+      "constraints": [
+        "保留用户修改，不新增未批准依赖",
+        "素材来源与演示边界必须明确"
+      ],
+      "checks": [
+        "typecheck",
+        "lint",
+        "test",
+        "build"
+      ]
+    },
+    {
+      "id": "content",
+      "title": "双语内容与动态数据",
+      "description": "保持模板职责边界、双语与响应式；运行相关检查。",
+      "files": [
+        {
+          "path": "src/features/site-templates/catalog/landfall/content",
+          "kind": "directory",
+          "purpose": "双语内容与动态数据"
+        }
+      ],
+      "constraints": [
+        "保留用户修改，不新增未批准依赖",
+        "素材来源与演示边界必须明确"
+      ],
+      "checks": [
+        "typecheck",
+        "lint",
+        "test",
+        "build"
+      ]
+    },
+    {
+      "id": "theme",
+      "title": "主题令牌",
+      "description": "保持模板职责边界、双语与响应式；运行相关检查。",
+      "files": [
+        {
+          "path": "src/features/site-templates/catalog/landfall/tokens.css",
+          "kind": "file",
+          "purpose": "主题令牌"
+        }
+      ],
+      "constraints": [
+        "保留用户修改，不新增未批准依赖",
+        "素材来源与演示边界必须明确"
+      ],
+      "checks": [
+        "typecheck",
+        "lint",
+        "test",
+        "build"
+      ]
+    },
+    {
+      "id": "animations",
+      "title": "交互和动效",
+      "description": "保持模板职责边界、双语与响应式；运行相关检查。",
+      "files": [
+        {
+          "path": "src/features/site-templates/catalog/landfall/components",
+          "kind": "directory",
+          "purpose": "交互和动效"
+        }
+      ],
+      "constraints": [
+        "保留用户修改，不新增未批准依赖",
+        "素材来源与演示边界必须明确"
+      ],
+      "checks": [
+        "typecheck",
+        "lint",
+        "test",
+        "build"
+      ]
+    },
+    {
+      "id": "pages",
+      "title": "页面组合",
+      "description": "保持模板职责边界、双语与响应式；运行相关检查。",
+      "files": [
+        {
+          "path": "src/features/site-templates/catalog/landfall/views",
+          "kind": "directory",
+          "purpose": "页面组合"
+        }
+      ],
+      "constraints": [
+        "保留用户修改，不新增未批准依赖",
+        "素材来源与演示边界必须明确"
+      ],
+      "checks": [
+        "typecheck",
+        "lint",
+        "test",
+        "build"
+      ]
+    }
+  ],
+  "$schema": "./schemas/customization.schema.json"
+}

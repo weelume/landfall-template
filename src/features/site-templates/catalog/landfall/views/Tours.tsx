@@ -1,0 +1,11 @@
+'use client'
+import {useState} from 'react'
+import {tours,pageData} from '../content/data'
+import {ListingHero,TourCard} from '../components/Collections'
+import {PlanCTA} from '../components/HomeSections'
+import {useSite} from '../components/context'
+import {Reveal} from '../components/motion'
+export function Tours(){const {t,pick}=useSite(),[style,setStyle]=useState(''),[country,setCountry]=useState(''),[limit,setLimit]=useState(6),page=pageData.find(p=>p.path==='/tours')!
+ const filtered=tours.filter(tour=>(!style||tour.style===style)&&(!country||tour.country===country))
+ const styles=[...new Set(tours.map(tour=>tour.style))],countries=[...new Set(tours.map(tour=>tour.country))]
+ return <><ListingHero title={page.heading} subtitle={page.hero.subtitle??''} image={page.hero.image?.src}/><section className="lf-section lf-dark lf-tour-list"><div className="lf-filter-bar">{[{label:pick('出行方式','How you travel'),values:styles,current:style,set:setStyle,other:country,key:'style'},{label:pick('目的地','Where'),values:countries,current:country,set:setCountry,other:style,key:'country'}].map(group=><fieldset key={group.key}><legend>{group.label}</legend><div className="lf-chips">{['',...group.values].map(value=>{const count=tours.filter(tour=>(!value||(group.key==='style'?tour.style:tour.country)===value)&&(!group.other||(group.key==='style'?tour.country:tour.style)===group.other)).length;return <button aria-pressed={group.current===value} key={value} onClick={()=>{group.set(group.current===value?'':value);setLimit(6)}}>{value?t(value):pick('全部','All')} <small>{count}</small></button>})}</div></fieldset>)}</div><p className="lf-eyebrow" role="status">{pick('共 '+filtered.length+' / '+tours.length+' 条行程','Showing '+filtered.length+' of '+tours.length+' tours')}</p>{filtered.length?<div className="lf-tour-grid">{filtered.slice(0,limit).map((tour,index)=><Reveal key={tour.slug} delay={index%2*.12}><TourCard tour={tour}/></Reveal>)}</div>:<div className="lf-empty"><h2>{pick('没有符合条件的行程','No tours match these filters')}</h2><button className="lf-pill" onClick={()=>{setStyle('');setCountry('')}}>{pick('清除筛选','Clear filters')}</button></div>}{filtered.length>limit&&<button className="lf-pill lf-pill-light" onClick={()=>setLimit(filtered.length)}>{pick('显示更多行程','Show more tours')}</button>}</section><PlanCTA/></>}

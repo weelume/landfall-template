@@ -1,0 +1,16 @@
+'use client'
+import {pageData,reviews} from '../content/data'
+import {useSite} from '../components/context'
+import {Picture,Heading,SiteLink,Eyebrow} from '../components/ui'
+import {Blocks} from '../components/Editorial'
+import {Reveal} from '../components/motion'
+export function ReviewList(){const {t,pick}=useSite();return <section className="lf-section lf-dark"><Heading text="In their own words."/><div className="lf-reviews-grid">{reviews.map((review,index)=><Reveal key={review.slug} delay={index%2*.1}><figure className="lf-glass"><p className="lf-stars" aria-label={review.stars+pick(' 星',' stars')}>{'★'.repeat(Number(review.stars))}</p><blockquote>{t(review.quote)}</blockquote><figcaption><Picture src={review.image}/><div>{t(review.name)}<small>{t(review.trip)}</small></div></figcaption></figure></Reveal>)}</div></section>}
+export function TravelSteps(){const source=pageData.find(p=>p.path==='/how-it-works')!.sections[1],{t,pick}=useSite(),parts=source.blocks.flatMap((block,index)=>block.type==='h3'?[{title:block.text,body:source.blocks[index+1]?.text??''}]:[]);return <section className="lf-section lf-dark"><Heading text={source.heading!}/><div className="lf-travel-steps">{parts.map((part,index)=><article className={'lf-travel-step'+(index%2?' is-reverse':'')} key={part.title}><div><Eyebrow>{pick('第 '+(index+1)+' 步','Step '+(index+1))}</Eyebrow><span className="lf-step-number" aria-hidden="true">{String(index+1).padStart(2,'0')}</span><Heading text={part.title}/><p>{t(part.body)}</p></div>{source.images[index%source.images.length]&&<Picture src={source.images[index%source.images.length].src} alt={source.images[index%source.images.length].alt??''} reveal={index%2?'right':'left'}/>}</article>)}</div><div className="lf-editorial-copy"><Blocks blocks={source.blocks.filter(block=>block.type!=='h3'&&!parts.some(part=>part.body===block.text))}/></div></section>}
+const roles=[
+ {title:'Tour planner, Southern Europe',team:'Planning',place:'Lisbon or remote',type:'Full time'},
+ {title:'Lead guide, Scottish Highlands',team:'Guides',place:'Fort William',type:'Seasonal, April to October'},
+ {title:'Traveller care',team:'Support',place:'Lisbon',type:'Full time'},
+ {title:'Photographer in residence',team:'Journal',place:'On the road',type:'Three months'},
+ {title:'Operations, Patagonia',team:'Operations',place:'Puerto Natales',type:'Full time'},
+]
+export function CareersContent(){const {t,pick}=useSite(),source=pageData.find(p=>p.path==='/careers')!.sections[1];return <section className="lf-section lf-dark"><Heading text="Come and plan with us."/><div className="lf-role-list">{roles.map((role,index)=><SiteLink key={role.title} to={'contact?role='+encodeURIComponent(t(role.title))}><small>{String(index+1).padStart(2,'0')}</small><div><h3>{t(role.title)}</h3><p>{t(role.team)} · {t(role.place)} · {t(role.type)}</p></div><span>{pick('了解岗位','View role')}</span></SiteLink>)}</div><div className="lf-editorial-columns"><div className="lf-editorial-copy"><Blocks blocks={source.blocks.slice(source.blocks.findIndex(b=>b.text==='How it feels'))}/></div>{source.images[0]&&<Picture src={source.images[0].src} alt={source.images[0].alt??''} reveal="bottom"/>}</div></section>}
