@@ -5,10 +5,11 @@ import {destinations,guides,posts,tours,type Tour,type Guide,type Post} from '..
 import {useSite} from './context'
 import {Picture,SiteLink,SectionHead,Heading,Eyebrow} from './ui'
 import {Reveal} from './motion'
+import {debugEvent} from './debug'
 
 export function TourCard({tour,compact=false}:{tour:Tour;compact?:boolean}) {
  const {t,pick}=useSite()
- return <SiteLink to={'tour/'+tour.slug} className={'lf-tour-card'+(compact?' is-compact':'')}><div className="lf-card-image"><Picture src={tour.image} alt={tour.alt} reveal="bottom"/><p className="lf-eyebrow">{t(tour.style)} · {t(tour.country)}</p></div><div className="lf-card-caption"><h3>{t(tour.title)}</h3><p>{tour.days}{pick(' 天',' days')} · {pick('起价 ','from ')}{tour.price} · {t(tour.departs)} · {tour.seats}{pick(' 个余位',' left')}</p></div></SiteLink>
+ return <SiteLink to={'tour/'+tour.slug} draggable={false} className={'lf-tour-card'+(compact?' is-compact':'')}><div className="lf-card-image"><Picture src={tour.image} alt={tour.alt} reveal="bottom"/><p className="lf-eyebrow">{t(tour.style)} · {t(tour.country)}</p></div><div className="lf-card-caption"><h3>{t(tour.title)}</h3><p>{tour.days}{pick(' 天',' days')} · {pick('起价 ','from ')}{tour.price} · {t(tour.departs)} · {tour.seats}{pick(' 个余位',' left')}</p></div></SiteLink>
 }
 export function GuideCard({guide}:{guide:Guide}) {const {t,pick}=useSite();return <article className="lf-guide-card lf-glass"><Picture src={guide.image} alt={guide.alt} reveal="bottom"/><div><Eyebrow>{t(guide.role)}</Eyebrow><h3>{t(guide.name)}</h3><p>{t(guide.description)}</p><p className="lf-eyebrow">{guide.toursLed} {pick('次带队经历','tours led')}</p><SiteLink to={'guide/'+guide.slug} className="lf-underlined">{pick('认识向导','Meet '+guide.name.split(' ')[0])}</SiteLink></div></article>}
 
@@ -21,10 +22,10 @@ export function CollectionCarousel({kind='tours'}:{kind?:'tours'|'guides'}) {
  if(kind==='guides'&&mobile)return <NativeGuides/>
  if(!count)return null
  const selected=items[normalize(active)]
- function released(_:MouseEvent|TouchEvent|PointerEvent,info:PanInfo){setDragging(false);if(Math.abs(info.offset.x)>45||Math.abs(info.velocity.x)>300){const step=Math.min(2,Math.max(1,Math.round((Math.abs(info.offset.x)+Math.min(Math.abs(info.velocity.x)*.12,500))/350)));setActive(value=>normalize(value+(info.offset.x<0?step:-step)))}}
+ function released(_:MouseEvent|TouchEvent|PointerEvent,info:PanInfo){debugEvent('轮播拖拽释放',{kind,offset:Math.round(info.offset.x),velocity:Math.round(info.velocity.x)});setDragging(false);if(Math.abs(info.offset.x)>45||Math.abs(info.velocity.x)>300){const step=Math.min(2,Math.max(1,Math.round((Math.abs(info.offset.x)+Math.min(Math.abs(info.velocity.x)*.12,500))/350)));setActive(value=>normalize(value+(info.offset.x<0?step:-step)))}}
  return <div className={'lf-carousel lf-carousel-'+kind}>
   <div className="lf-carousel-window" role="group" tabIndex={0} aria-label={pick('拖拽或使用左右方向键切换','Drag, or use the arrow keys')} onKeyDown={e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();setActive(value=>normalize(value+(e.key==='ArrowRight'?1:-1)))}else if(e.key==='Home'){e.preventDefault();setActive(0)}else if(e.key==='End'){e.preventDefault();setActive(count-1)}}} onWheel={e=>{if(Math.abs(e.deltaX)<Math.abs(e.deltaY)||Math.abs(e.deltaX)<10)return;if(wheel.current)clearTimeout(wheel.current);wheel.current=setTimeout(()=>setActive(value=>normalize(value+(e.deltaX>0?1:-1))),140)}}>
-   <motion.div className="lf-carousel-drag" drag="x" dragConstraints={{left:0,right:0}} dragElastic={.5} dragMomentum={false} onDragStart={()=>setDragging(true)} onDragEnd={released} style={{touchAction:'pan-y'}}>
+   <motion.div className="lf-carousel-drag" drag="x" dragConstraints={{left:0,right:0}} dragElastic={.5} dragMomentum={false} onDragStart={()=>{debugEvent('轮播拖拽开始',{kind});setDragging(true)}} onDragEnd={released} style={{touchAction:'pan-y'}}>
     {items.map((item,index)=>{let offset=normalize(index-active);if(offset>count/2)offset-=count;return <motion.div key={item.slug} className="lf-carousel-slide" initial={false} animate={{x:`${offset*106}%`,scale:offset===0?1:kind==='guides'?.88:mobile?.9:.84,y:Math.abs(offset)*(kind==='guides'?28:22),rotate:kind==='guides'?offset*9:0,opacity:Math.abs(offset)<=2?1:0}} transition={reduced?{duration:0}:{type:'spring',stiffness:190,damping:28}} style={{zIndex:count-Math.abs(offset),pointerEvents:Math.abs(offset)<=2&&!dragging?'auto':'none'}} aria-hidden={offset!==0} onClickCapture={event=>{if(offset!==0){event.preventDefault();setActive(index)}}}><div inert={offset!==0}>{kind==='tours'?<TourCard tour={item as Tour}/>:<GuideCard guide={item as Guide}/>}</div></motion.div>})}
    </motion.div>
   </div>
