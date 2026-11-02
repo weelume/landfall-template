@@ -1,0 +1,85 @@
+{
+  "$schema": "../schemas/verification.schema.json",
+  "format": "git-template-verification",
+  "formatVersion": "0.2.0",
+  "status": "passed",
+  "checkedAt": "2026-11-02T08:46:15.703Z",
+  "sourceCommit": "557e471ee767af424e9af8ee20872f28cf1e8a2f",
+  "sourceDigest": "9f3687f3bbbe2078929f90436dd3865308d8c2f0e3e084808500ac7dcff197e2",
+  "environment": {
+    "platform": "linux",
+    "arch": "x64",
+    "node": "v24.16.0",
+    "packageManager": "12.10.1",
+    "cleanDirectory": true,
+    "localGitClone": true
+  },
+  "checks": [
+    {
+      "id": "typecheck",
+      "cwd": ".",
+      "argv": [
+        "pnpm",
+        "run",
+        "typecheck"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-11-02T08:45:51.316Z",
+      "finishedAt": "2026-11-02T08:45:52.408Z"
+    },
+    {
+      "id": "lint",
+      "cwd": ".",
+      "argv": [
+        "pnpm",
+        "run",
+        "lint"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-11-02T08:45:52.409Z",
+      "finishedAt": "2026-11-02T08:45:55.246Z"
+    },
+    {
+      "id": "test",
+      "cwd": ".",
+      "argv": [
+        "pnpm",
+        "run",
+        "test"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-11-02T08:45:55.246Z",
+      "finishedAt": "2026-11-02T08:45:55.403Z"
+    },
+    {
+      "id": "build",
+      "cwd": ".",
+      "argv": [
+        "pnpm",
+        "run",
+        "build"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-11-02T08:45:55.404Z",
+      "finishedAt": "2026-11-02T08:46:11.261Z"
+    }
+  ],
+  "services": [
+    {
+      "id": "web",
+      "status": "passed",
+      "stopped": true,
+      "checkedAt": "2026-11-02T08:46:15.757Z"
+    }
+  ],
+  "limitations": [
+    "表单只做本地校验，不发送、不保存；无真实预订或支付。",
+    "浏览器布局矩阵与代表交互已验证，不代表所有设备/语言/交互组合均逐项验证。",
+    "未逐帧对比原站的全部几何与缓动；未实际切换系统减少动态设置。",
+    "照片和参考站内容的商业许可未确认。"
+  ]
+}
